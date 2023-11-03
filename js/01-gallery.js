@@ -29,23 +29,27 @@ function renderGallery(galleryArr) {
 
 renderGallery(galleryItems);
 
+let instance;
 
 function onImgClick(event) {
     event.preventDefault()
     const url = event.target.dataset.source;
-    const instance = basicLightbox.create(`
+    
+    instance = basicLightbox.create(`
     <img src="${url}" width="800" height="600">
     `, {
     onShow: (instance) => {
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                instance.close();
-            }
-        })
-    }
+            document.addEventListener('keydown', onEscPress);
+        },
+    onClose: (instance) => {
+        document.removeEventListener('keydown', onEscPress);
+      }, 
 })
     instance.show()
 }
 
-
-
+function onEscPress(event) {
+  if (event.key === 'Escape') {
+    instance.close();
+  }
+}
